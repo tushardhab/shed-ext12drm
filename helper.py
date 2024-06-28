@@ -152,21 +152,17 @@ def download_vvideo(download_cmd):
         print("Video download done")
 
 
-
-async def drm_download_video(url, cmd, name, keys):
+async def drm_download_video(url, name,cmd, keys):
     time.sleep(1)
     print(name)
-    download_cmd = f'{cmd} -k --allow-unplayable-formats --external-downloader aria2c --external-downloader-args "-x 16 -s 16 -k 1M" -o "{name}"'
+    download_cmd = f'yt-dlp {cmd} -k --allow-unplayable-formats --external-downloader aria2c --external-downloader-args "-x 16 -s 16 -k 1M" -o "{name}"'
     audio_cmd = f'yt-dlp -k --allow-unplayable-formats -f ba --fixup never {url} --external-downloader aria2c --external-downloader-args "aria2c: -x 16 -s 16 -k 1M" -o "{name}_audio.m4a"'
-    
-    audio_thread = threading.Thread(target=download_audio, args=(audio_cmd,))
-    video_thread = threading.Thread(target=download_vvideo, args=(download_cmd,))
-
-    audio_thread.start()
-    video_thread.start()
-
-    audio_thread.join()
-    video_thread.join()
+    print(download_cmd)
+    logging.info(download_cmd)
+    subprocess.run(audio_cmd, shell=True)
+    print("Audio download done")
+    subprocess.run(download_cmd, shell=True)
+    print("Video download done")
 
     # Split keys
     keys = keys.split(":")
