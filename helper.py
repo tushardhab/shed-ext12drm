@@ -147,7 +147,7 @@ def download_audio(audio_cmd):
         print("Audio download done")
 
     # Function to download video asynchronously
-def download_video(download_cmd):
+def download_vvideo(download_cmd):
         subprocess.run(download_cmd, shell=True)
         print("Video download done")
 
@@ -160,7 +160,7 @@ async def drm_download_video(url, cmd, name, keys):
     audio_cmd = f'yt-dlp -k --allow-unplayable-formats -f ba --fixup never {url} --external-downloader aria2c --external-downloader-args "aria2c: -x 16 -s 16 -k 1M" -o "{name}_audio.m4a"'
     
     audio_thread = threading.Thread(target=download_audio, args=(audio_cmd,))
-    video_thread = threading.Thread(target=download_video, args=(download_cmd,))
+    video_thread = threading.Thread(target=download_vvideo, args=(download_cmd,))
 
     audio_thread.start()
     video_thread.start()
@@ -324,27 +324,14 @@ def time_name():
 
 
 
-
-# async def send_doc(bot: Client, m: Message,cc,ka,cc1,prog,count,name):
-#     reply = await m.reply_text(f"Uploading - `{name}`")
-#     time.sleep(1)
-#     start_time = time.time()
-#     await m.reply_document(ka,caption=cc1)
-#     count+=1
-#     await reply.delete (True)
-#     time.sleep(1)
-#     os.remove(ka)
-#     time.sleep(3) 
-
-
-async def download_video(url, name,cmd):
+async def download_video(url, name, cmd):
     # ytf = f"b[height<={qual}]/bv[height<={qual}]+ba/b/bv+ba"
     # if ".pdf" in url :
     #     cmd = f'yt-dlp -o "{name}.pdf" "{url}"'    
     # else:
     #     cmd = f'yt-dlp -f "{ytf}" --no-keep-video --remux-video mkv "{url}" -o "{name}.%(ext)s"'
     time.sleep(0.5)
-    download_cmd = f'{cmd} -R infinite --fragment-retries 25 --socket-timeout 20 --external-downloader aria2c --downloader-args "aria2c: -x 16 -j 32" --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"'
+    download_cmd = f'{cmd} -R infinite --fragment-retries 25 --socket-timeout 20 --external-downloader aria2c --downloader-args "aria2c: -x 16 -j 32"'
     global failed_counter
     print(download_cmd)
     logging.info(download_cmd)
