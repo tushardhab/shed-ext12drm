@@ -591,8 +591,8 @@ async def download_schedule_item(client, message, schedule, batch_name, quals, t
                             cmd = f'yt-dlp -f "{ytf}" --no-keep-video --remux-video mkv "{url}" -o "{topic}.%(ext)s"'
                             file = await helper.download_video(url, topic, cmd)
                         else:
-                            cmd = f" -f bestvideo.{mapped_qual} --fixup never {url} "
-                            file = await helper.drm_download_video(url, topic, cmd, key)
+                              cmd = f" -f bestvideo.{mapped_qual} --fixup never {url} "
+                              file = await helper.drm_download_video(url, topic, cmd, key)
                         
                         await prog.delete(True)
                         cc1 = f'**➭ Title » {name1}** \n**➭ Batch » {batch_name}**\n**➭ Quality » {qual}**\n✨ **Downloaded by: {CR}**\n**━━━━━━━✦✗✦━━━━━━━**'
