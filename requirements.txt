@@ -1,0 +1,17 @@
+tgcrypto
+requests
+pyromod
+aiohttp
+ffmpeg
+ffprobe
+asyncio
+humanize
+pycurl
+aria2
+yt-dlp
+aiofiles
+logger
+pyromod
+pymongo
+wget
+httpx
