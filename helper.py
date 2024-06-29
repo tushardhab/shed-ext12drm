@@ -155,7 +155,7 @@ def download_vvideo(download_cmd):
 async def drm_download_video(url, name,cmd, keys):
     time.sleep(1)
     print(name)
-    download_cmd = f'yt-dlp {cmd} -k --allow-unplayable-formats --external-downloader aria2c --external-downloader-args "-x 16 -s 16 -k 1M" -o "{name}"'
+    download_cmd = f'yt-dlp {cmd} -k --allow-unplayable-formats --external-downloader aria2c --external-downloader-args "-x 16 -s 16 -k 1M" -o "{name}.mp4"'
     audio_cmd = f'yt-dlp -k --allow-unplayable-formats -f ba --fixup never {url} --external-downloader aria2c --external-downloader-args "aria2c: -x 16 -s 16 -k 1M" -o "{name}_audio.m4a"'
     print(download_cmd)
     logging.info(download_cmd)
