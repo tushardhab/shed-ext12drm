@@ -2,7 +2,6 @@ tgcrypto
 requests
 pyromod
 aiohttp
-ffmpeg
 ffprobe
 asyncio
 humanize
