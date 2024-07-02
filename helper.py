@@ -17,6 +17,7 @@ import urllib.parse
 import threading
 import httpx
 import re
+import stat
 
 
 async def get_pssh_kid(mpd_url: str, headers: dict = {}, cookies: dict = {}):
