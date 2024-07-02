@@ -141,120 +141,178 @@ async def get_drm_keys(url: str, token: str):
 
 
 
-    # Function to download audio asynchronously
-def download_audio(audio_cmd):
-        subprocess.run(audio_cmd, shell=True)
-        print("Audio download done")
+#     # Function to download audio asynchronously
+# def download_audio(audio_cmd):
+#         subprocess.run(audio_cmd, shell=True)
+#         print("Audio download done")
 
-    # Function to download video asynchronously
-def download_vvideo(download_cmd):
-        subprocess.run(download_cmd, shell=True)
-        print("Video download done")
+#     # Function to download video asynchronously
+# def download_vvideo(download_cmd):
+#         subprocess.run(download_cmd, shell=True)
+#         print("Video download done")
 
 
-async def drm_download_video(url, name,cmd, keys):
-    time.sleep(1)
-    print(name)
-    download_cmd = f'yt-dlp {cmd} -k --allow-unplayable-formats --external-downloader aria2c --external-downloader-args "-x 16 -s 16 -k 1M" -o "{name}.mp4"'
-    audio_cmd = f'yt-dlp -k --allow-unplayable-formats -f ba --fixup never {url} --external-downloader aria2c --external-downloader-args "aria2c: -x 16 -s 16 -k 1M" -o "{name}_audio.m4a"'
-    print(download_cmd)
-    logging.info(download_cmd)
-    subprocess.run(audio_cmd, shell=True)
-    print("Audio download done")
-    subprocess.run(download_cmd, shell=True)
-    print("Video download done")
+# async def drm_download_video(url, name,cmd, keys):
+#     time.sleep(1)
+#     print(name)
+#     download_cmd = f'yt-dlp {cmd} -k --allow-unplayable-formats --external-downloader aria2c --external-downloader-args "-x 16 -s 16 -k 1M" -o "{name}.mp4"'
+#     audio_cmd = f'yt-dlp -k --allow-unplayable-formats -f ba --fixup never {url} --external-downloader aria2c --external-downloader-args "aria2c: -x 16 -s 16 -k 1M" -o "{name}_audio.m4a"'
+#     print(download_cmd)
+#     logging.info(download_cmd)
+#     subprocess.run(audio_cmd, shell=True)
+#     print("Audio download done")
+#     subprocess.run(download_cmd, shell=True)
+#     print("Video download done")
 
-    # Split keys
+#     # Split keys
+#     keys = keys.split(":")
+#     if len(keys) != 2:
+#         print("Error: Two keys must be provided separated by a colon.")
+#         return None
+
+#     key1, key2 = keys
+
+#     try:
+#         # Check if the video file exists
+#         if os.path.isfile(name):
+#             video_file = name
+#         elif os.path.isfile(f"{name}.webm"):
+#             video_file = f"{name}.webm"
+#         else:
+#             name_without_extension = os.path.splitext(name)[0]
+#             if os.path.isfile(f"{name_without_extension}.mkv"):
+#                 video_file = f"{name_without_extension}.mkv"
+#             elif os.path.isfile(f"{name_without_extension}.mp4"):
+#                 video_file = f"{name_without_extension}.mp4"
+#             elif os.path.isfile(f"{name_without_extension}.mp4.webm"):
+#                 video_file = f"{name_without_extension}.mp4.webm"
+#             else:
+#                 video_file = None
+
+#         # Run the audio download command
+#         audio_file = f"{name}_audio.m4a" if os.path.isfile(f"{name}_audio.m4a") else None
+
+#         # Decrypt video with either key1 or key2
+#         decrypted_video_file = f"decrypted_{os.path.basename(video_file)}"
+#         decrypted_audio_file = f"decrypted_{os.path.basename(audio_file)}"
+
+#         if not decrypted_video_file.endswith(('.mkv', '.mp4', '.webm')):
+#             decrypted_video_file += ".mp4"
+#         if not decrypted_audio_file.endswith('.m4a'):
+#             decrypted_audio_file += ".m4a"
+
+#         video_decryption_successful = False
+#         for video_key in [key2, key1]:
+#             decrypt_video_cmd = f'ffmpeg -decryption_key {video_key} -i "{video_file}" -c:v copy "{decrypted_video_file}"'
+#             decrypt_video_process = subprocess.run(decrypt_video_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+#             if decrypt_video_process.returncode == 0:
+#                 print(f"Video decryption successful with key {video_key}.")
+#                 video_decryption_successful = True
+#                 successful_video_key = video_key
+#                 break
+#             else:
+#                 print(f"Video decryption failed with key {video_key}: {decrypt_video_process.stderr.decode()}")
+
+#         if not video_decryption_successful:
+#             print("Video decryption failed with both keys.")
+#             return video_file, audio_file
+
+#         # Decrypt audio with the other key
+#         audio_decryption_successful = False
+#         for audio_key in [key2, key1]:
+#             #if audio_key != successful_video_key:
+#                 decrypt_audio_cmd = f'ffmpeg -decryption_key {audio_key} -i "{audio_file}" -c:a copy "{decrypted_audio_file}"'
+#                 print(decrypt_audio_cmd)
+#                 decrypt_audio_process = subprocess.run(decrypt_audio_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+#                 if decrypt_audio_process.returncode == 0:
+#                     print(f"Audio decryption successful with key {audio_key}.")
+#                     audio_decryption_successful = True
+#                     break
+#                 else:
+#                     print(f"Audio decryption failed with key {audio_key}: {decrypt_audio_process.stderr.decode()}")
+
+#         if not audio_decryption_successful:
+#             print("Audio decryption failed with both keys.")
+#             return video_file, audio_file
+
+#         # Merge decrypted video and audio
+#         output_file = f"{os.path.splitext(decrypted_video_file)[0]}.mkv"
+#         merge_cmd = f'ffmpeg -i "{decrypted_video_file}" -i "{decrypted_audio_file}" -c copy -threads 4 "{output_file}"'
+#         merge_process = subprocess.run(merge_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        
+#         if merge_process.returncode == 0:
+#             # Delete intermediate files
+#             os.remove(video_file)
+#             os.remove(audio_file)
+#             os.remove(decrypted_video_file)
+#             os.remove(decrypted_audio_file)
+#             return output_file
+#         else:
+#             print(f"Merging failed: {merge_process.stderr.decode()}")
+#             return decrypted_video_file, decrypted_audio_file
+
+#     except FileNotFoundError as exc:
+#         print(f"File not found: {exc}")
+#         return os.path.splitext(name)[0] + ".mp4", None
+
+
+async def drm_download_video(url, qual, name, keys):
+
+    print(keys)
     keys = keys.split(":")
     if len(keys) != 2:
         print("Error: Two keys must be provided separated by a colon.")
         return None
-
     key1, key2 = keys
 
+
+    if qual =="1":
+        nqual="720"
+
+    elif qual=="2":
+        nqual= "480" 
+
+    elif qual =="3":
+        nqual="360"
+
+    elif qual=="4":
+        nqual="240"
+    else :
+        nqual="480"                
+  
     try:
-        # Check if the video file exists
-        if os.path.isfile(name):
-            video_file = name
-        elif os.path.isfile(f"{name}.webm"):
-            video_file = f"{name}.webm"
-        else:
-            name_without_extension = os.path.splitext(name)[0]
-            if os.path.isfile(f"{name_without_extension}.mkv"):
-                video_file = f"{name_without_extension}.mkv"
-            elif os.path.isfile(f"{name_without_extension}.mp4"):
-                video_file = f"{name_without_extension}.mp4"
-            elif os.path.isfile(f"{name_without_extension}.mp4.webm"):
-                video_file = f"{name_without_extension}.mp4.webm"
-            else:
-                video_file = None
-
-        # Run the audio download command
-        audio_file = f"{name}_audio.m4a" if os.path.isfile(f"{name}_audio.m4a") else None
-
-        # Decrypt video with either key1 or key2
-        decrypted_video_file = f"decrypted_{os.path.basename(video_file)}"
-        decrypted_audio_file = f"decrypted_{os.path.basename(audio_file)}"
-
-        if not decrypted_video_file.endswith(('.mkv', '.mp4', '.webm')):
-            decrypted_video_file += ".mp4"
-        if not decrypted_audio_file.endswith('.m4a'):
-            decrypted_audio_file += ".m4a"
-
-        video_decryption_successful = False
-        for video_key in [key2, key1]:
-            decrypt_video_cmd = f'ffmpeg -decryption_key {video_key} -i "{video_file}" -c:v copy "{decrypted_video_file}"'
-            decrypt_video_process = subprocess.run(decrypt_video_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            if decrypt_video_process.returncode == 0:
-                print(f"Video decryption successful with key {video_key}.")
-                video_decryption_successful = True
-                successful_video_key = video_key
-                break
-            else:
-                print(f"Video decryption failed with key {video_key}: {decrypt_video_process.stderr.decode()}")
-
-        if not video_decryption_successful:
-            print("Video decryption failed with both keys.")
-            return video_file, audio_file
-
-        # Decrypt audio with the other key
-        audio_decryption_successful = False
-        for audio_key in [key2, key1]:
-            #if audio_key != successful_video_key:
-                decrypt_audio_cmd = f'ffmpeg -decryption_key {audio_key} -i "{audio_file}" -c:a copy "{decrypted_audio_file}"'
-                print(decrypt_audio_cmd)
-                decrypt_audio_process = subprocess.run(decrypt_audio_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                if decrypt_audio_process.returncode == 0:
-                    print(f"Audio decryption successful with key {audio_key}.")
-                    audio_decryption_successful = True
-                    break
-                else:
-                    print(f"Audio decryption failed with key {audio_key}: {decrypt_audio_process.stderr.decode()}")
-
-        if not audio_decryption_successful:
-            print("Audio decryption failed with both keys.")
-            return video_file, audio_file
-
-        # Merge decrypted video and audio
-        output_file = f"{os.path.splitext(decrypted_video_file)[0]}.mkv"
-        merge_cmd = f'ffmpeg -i "{decrypted_video_file}" -i "{decrypted_audio_file}" -c copy -threads 4 "{output_file}"'
-        merge_process = subprocess.run(merge_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # Get the directory of the current script
+        current_dir = os.path.dirname(os.path.abspath(__file__))
         
-        if merge_process.returncode == 0:
-            # Delete intermediate files
-            os.remove(video_file)
-            os.remove(audio_file)
-            os.remove(decrypted_video_file)
-            os.remove(decrypted_audio_file)
-            return output_file
-        else:
-            print(f"Merging failed: {merge_process.stderr.decode()}")
-            return decrypted_video_file, decrypted_audio_file
+        # Path to N_m3u8DL-RE
+        n_m3u8dl_re_path = os.path.join(current_dir, "N_m3u8DL-RE")
+        
+                # Add execute permission
+        current_permissions = os.stat(n_m3u8dl_re_path).st_mode
+        os.chmod(n_m3u8dl_re_path, current_permissions | stat.S_IEXEC)
 
-    except FileNotFoundError as exc:
-        print(f"File not found: {exc}")
-        return os.path.splitext(name)[0] + ".mp4", None
 
+
+        # Use N_m3u8DL-RE for decryption
+        nurl = url.replace("master",f"master_{nqual}")
+        subprocess.run([
+            n_m3u8dl_re_path,
+            "--auto-select",
+            "--key", f"{key1}:{key2}",
+            nurl,
+            "-mt",  # Enable multi-threading
+            "--thread-count", "16",  
+            "-M", "format=mkv",  
+            "--save-name", name
+        ], check=True)
+        
+        mkv_file = f"{name}.mkv"
+        
+        print(f"Decryption and download to MKV successful with key {keys}.")
+        return mkv_file
+    except subprocess.CalledProcessError as e:
+        print(f"Error in download or conversion process: {e}")
+        return None
 
 def duration(name):
     result = subprocess.run([
