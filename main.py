@@ -611,7 +611,7 @@ async def download_schedule_item(client, message, schedule, batch_name, quals, t
                     nurl = f'https://d2bps9p1kiy4ka.cloudfront.net/{key}'
                     try:
                         prog = await client.send_message(message.chat.id, f"📥 **Downloading **\n**➭ File » ** `{pname}`\n**➭ Link »** `{nurl}`\n✨ **Bot Made by Devansh**\n**━━━━━━━✦✗✦━━━━━━━**")
-                        cmd = f'yt-dlp -o "{pname}" "{nurl}"'
+                        cmd = f'yt-dlp "{nurl}" -o "{pname}"'
                         download_cmd = f"{cmd} -R 25 --fragment-retries 25"
                         os.system(download_cmd)
                         await prog.delete(True)
@@ -621,8 +621,6 @@ async def download_schedule_item(client, message, schedule, batch_name, quals, t
                         time.sleep(1)
                     except Exception as e:
                         await client.send_message(message.chat.id, f"**This #Failed File is not Counted**\n**Name** =>> `{pname}`\n**Link** =>> `{nurl}`\n **Fail reason »** {e}")
-
-
 
 
 @app.on_message(filters.command("weekly"))
