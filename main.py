@@ -9,7 +9,6 @@ import time
 from pyromod import listen
 from pymongo import MongoClient
 import helper
-# from helper import get_drm_keys
 import asyncio
 import subprocess
 
@@ -18,7 +17,7 @@ import subprocess
 app = Client(
     "bot",
     #bot_token="6178250261:AAGx5Z-uofPm2AASeFpvlx_zEQj0PAy99n0",
-    bot_token="6945304562:AAEerKma__3m_DUkBOcUMYtpdemkZNqsbFQ",
+    bot_token="7042471552:AAENCDzjdSvY5ppmRew7ecfcK14vtfpTOUg",
     api_id=28590119,
     api_hash="2494557bf21e6c5152f26070aa1a97c7"
 )
