@@ -7,7 +7,7 @@ asyncio
 humanize
 pycurl
 aria2
-yt-dlp
+yt-dlp==2023.10.13
 aiofiles
 logger
 pyromod
