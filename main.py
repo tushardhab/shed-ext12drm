@@ -611,7 +611,7 @@ async def download_schedule_item(client, message, schedule, batch_name, quals, t
                     nurl = f'https://d2bps9p1kiy4ka.cloudfront.net/{key}'
                     try:
                         prog = await client.send_message(message.chat.id, f"📥 **Downloading **\n**➭ File » ** `{pname}`\n**➭ Link »** `{nurl}`\n✨ **Bot Made by Devansh**\n**━━━━━━━✦✗✦━━━━━━━**")
-                        cmd = f'yt-dlp "{nurl}" -o "{pname}"'
+                        cmd = f'yt-dlp "{nurl}" -o "{pname}" --allow-unplayable-formats'
                         download_cmd = f"{cmd} -R 25 --fragment-retries 25"
                         os.system(download_cmd)
                         await prog.delete(True)
