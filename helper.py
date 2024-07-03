@@ -268,19 +268,19 @@ async def drm_download_video(url, qual, name, keys):
     key1, key2 = keys
 
 
-    if qual =="1":
-        nqual="720"
+    # if qual =="1":
+    #     nqual="720"
 
-    elif qual=="2":
-        nqual= "480" 
+    # elif qual=="2":
+    #     nqual= "480" 
 
-    elif qual =="3":
-        nqual="360"
+    # elif qual =="3":
+    #     nqual="360"
 
-    elif qual=="4":
-        nqual="240"
-    else :
-        nqual="480"                
+    # elif qual=="4":
+    #     nqual="240"
+    # else :
+    #     nqual="480"                
   
     try:
         # Get the directory of the current script
@@ -296,7 +296,7 @@ async def drm_download_video(url, qual, name, keys):
 
 
         # Use N_m3u8DL-RE for decryption
-        nurl = url.replace("master",f"master_{nqual}")
+        nurl = url.replace("master",f"master_{qual}")
         subprocess.run([
             n_m3u8dl_re_path,
             "--auto-select",
