@@ -87,7 +87,7 @@ Busy = InlineKeyboardMarkup(
 @app.on_message(filters.command("start"))
 async def start_command(client, message):
     random_image_url = random.choice(image_urls)
-    caption = "**Hi! 👋🏼 I am your Penpencil bot. \n✌🏼 Use /today to Get Today shedule Class \n✌🏼 Use /weekly to get Weekly Shedule Lec  [in beta stage ] **"
+    caption = "**Hi! 👋🏼 I am your Penpencil bot. \n✌🏼 Use /today to Get Today shedule Class \n✌🏼 Use /weekly to get Weekly Shedule Lec  [in beta stage ] \n↪ If new Use /save_details 1st \n↪ Use /edit_details to edit stored data  **"
     await client.send_photo(chat_id=message.chat.id, photo=random_image_url, caption=caption, reply_markup=keyboard)
 
 @app.on_message(filters.command(["logs"]))
