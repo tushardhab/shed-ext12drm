@@ -487,12 +487,12 @@ async def handle_callback_query(client: Client, callback_query: CallbackQuery):
                         continue
 
                     if "pdf" not in name.lower():
-                        print(f"pdf : {name} \n schedule : {schedule}")
+                        print(f"pdf : {name} ")
                         await download_schedule_item(client, callback_query.message, schedule, batch_name, [""], thumb, CR)
                     else:
                         for qual in quals:
                             print(f"pdf : {name}")
-                            print(f"qual of dpp lec  : {qual} \n schedule : {schedule}")
+                            print(f"qual of dpp lec  : {qual}")
                             await download_schedule_item(client, callback_query.message, schedule, batch_name, [qual], thumb, CR)
 
 
@@ -517,7 +517,7 @@ async def handle_callback_query(client: Client, callback_query: CallbackQuery):
         await callback_query.message.delete()
 
         for idx, schedule in enumerate(schedule_data):
-            print(schedule)
+            #print(schedule)
             topic = schedule.get('topic', 'No Topic')
             is_notes = any(keyword.lower() in topic.lower() for keyword in ['(of lec', 'Notes', 'paper', 'pdf'])
             homework_ids = [hw_id['_id'] for hw_id in schedule.get('homeworkIds', [])]
@@ -573,6 +573,8 @@ async def handle_callback_query(client: Client, callback_query: CallbackQuery):
 
 async def download_schedule_item(client, message, schedule, batch_name, quals, thumb, CR):
     topic = schedule.get('topic', '')
+    #sub = schedule.get('subjectId')
+    subject = schedule.get('subjectId').get('name','ND')
     if 'url' in schedule:
         url = schedule['url']
         for qual in quals:
@@ -592,9 +594,8 @@ async def download_schedule_item(client, message, schedule, batch_name, quals, t
                         else:
                               #cmd = f" -f bestvideo.{mapped_qual} --fixup never {url} "
                               file = await helper.drm_download_video(url,qual, topic, key)
-                        
                         await prog.delete(True)
-                        cc1 = f'**➭ Title » {name1}** \n**➭ Batch » {batch_name}**\n**➭ Quality » {qual}**\n✨ **Downloaded by: @TEAM_SILENT_KING_OG**\n**━━━━━━━✦✗✦━━━━━━━**'
+                        cc1 = f'**➭ Title » {name1}** \n**➭ Batch » {batch_name}**\n**➭ Subject » {subject} **\n**➭ Quality » {qual}**\n✨ **Downloaded by: @TEAM_SILENT_KING_OG**\n**━━━━━━━✦✗✦━━━━━━━**'
                         #cc1 = f'**➭ Title » {name1}** \n**➭ Batch » {batch_name}**\n**➭ Quality » {qual}**\n✨ **Downloaded by: {CR}**\n**━━━━━━━✦✗✦━━━━━━━**'
                         video = await helper.send_vid(bot=client, m=message, cc=cc1, filename=file, name=name1,thumb=thumb)
                         time.sleep(1)
@@ -616,7 +617,7 @@ async def download_schedule_item(client, message, schedule, batch_name, quals, t
                         download_cmd = f"{cmd} -R 25 --fragment-retries 25"
                         os.system(download_cmd)
                         await prog.delete(True)
-                        cc1 = f'**➭ Title » {pname}** \n**➭ Batch » {batch_name}**\n✨ **Downloaded by: @TEAM_SILENT_KING_OG **\n**━━━━━━━✦✗✦━━━━━━━**'
+                        cc1 = f'**➭ Title » {pname}** \n**➭ Batch » {batch_name}**\n**➭ Subject » {subject} **\n✨ **Downloaded by: @TEAM_SILENT_KING_OG **\n**━━━━━━━✦✗✦━━━━━━━**'
                         #cc1 = f'**➭ Title » {pname}** \n**➭ Batch » {batch_name}**\n✨ **Downloaded by: {CR}**\n**━━━━━━━✦✗✦━━━━━━━**'
                         await client.send_document(message.chat.id, pname, caption=cc1)
                         os.remove(f'{pname}')
