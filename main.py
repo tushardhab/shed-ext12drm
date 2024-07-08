@@ -594,7 +594,7 @@ async def download_schedule_item(client, message, schedule, batch_name, quals, t
                               #cmd = f" -f bestvideo.{mapped_qual} --fixup never {url} "
                               file = await helper.drm_download_video(url,qual, topic, key)
                         await prog.delete(True)
-                        cc1 = f'**➭ Title » {name1}** \n**➭ Batch » {batch_name}**\n**➭ Subject » {subject} **\n**➭ Quality » {qual}**\n\n✨ **Downloaded by: @TEAM_SILENT_KING_OG**\n**━━━━━━━✦✗✦━━━━━━━**'
+                        cc1 = f'**➭ Title » {name1}** \n**➭ Batch » {batch_name}**\n**➭ Subject » {subject} **\n**➭ Quality » {qual}**\n\n✨ **Downloaded by: @HKOWNER0**\n**━━━━━━━✦✗✦━━━━━━━**'
                         #cc1 = f'**➭ Title » {name1}** \n**➭ Batch » {batch_name}**\n**➭ Quality » {qual}**\n✨ **Downloaded by: {CR}**\n**━━━━━━━✦✗✦━━━━━━━**'
                         video = await helper.send_vid(bot=client, m=message, cc=cc1, filename=file, name=name1,thumb=thumb)
                         time.sleep(1)
@@ -611,12 +611,12 @@ async def download_schedule_item(client, message, schedule, batch_name, quals, t
                     key = attachment.get('key', 'No Key')
                     nurl = f'https://d2bps9p1kiy4ka.cloudfront.net/{key}'
                     try:
-                        prog = await client.send_message(message.chat.id, f"📥 **Downloading **\n**➭ File » ** `{pname}`\n**➭ Link »** `{nurl}`\n✨ **Bot Made by Devansh**\n**━━━━━━━✦✗✦━━━━━━━**")
+                        prog = await client.send_message(message.chat.id, f"📥 **Downloading **\n**➭ File » ** `{pname}`\n**➭ Link »** `{nurl}`\n✨ **Bot Made by HK**\n**━━━━━━━✦✗✦━━━━━━━**")
                         cmd = f'yt-dlp "{nurl}" -o "{pname}" --allow-unplayable-formats'
                         download_cmd = f"{cmd} -R 25 --fragment-retries 25"
                         os.system(download_cmd)
                         await prog.delete(True)
-                        cc1 = f'**➭ Title » {pname}** \n**➭ Batch » {batch_name}**\n**➭ Subject » {subject} **\n\n✨ **Downloaded by: @TEAM_SILENT_KING_OG **\n**━━━━━━━✦✗✦━━━━━━━**'
+                        cc1 = f'**➭ Title » {pname}** \n**➭ Batch » {batch_name}**\n**➭ Subject » {subject} **\n\n✨ **Downloaded by: @HKOWNER0 **\n**━━━━━━━✦✗✦━━━━━━━**'
                         #cc1 = f'**➭ Title » {pname}** \n**➭ Batch » {batch_name}**\n✨ **Downloaded by: {CR}**\n**━━━━━━━✦✗✦━━━━━━━**'
                         await client.send_document(message.chat.id, pname, caption=cc1)
                         os.remove(f'{pname}')
