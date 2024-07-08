@@ -17,7 +17,7 @@ import subprocess
 app = Client(
     "bot",
     #bot_token="6178250261:AAGx5Z-uofPm2AASeFpvlx_zEQj0PAy99n0",
-    bot_token="7473074099:AAFFjtTaxTKA-q8LHgsCHq_Xljk5xb4E81I",
+    bot_token="",
     api_id= 24798261,
     api_hash="fef280037f5759eccc540c6d7a279a14"
 )
