@@ -17,20 +17,20 @@ import subprocess
 app = Client(
     "bot",
     #bot_token="6178250261:AAGx5Z-uofPm2AASeFpvlx_zEQj0PAy99n0",
-    bot_token="7042471552:AAENCDzjdSvY5ppmRew7ecfcK14vtfpTOUg",
-    api_id=28590119,
-    api_hash="2494557bf21e6c5152f26070aa1a97c7"
+    bot_token="7473074099:AAFFjtTaxTKA-q8LHgsCHq_Xljk5xb4E81I",
+    api_id= 24798261,
+    api_hash="fef280037f5759eccc540c6d7a279a14"
 )
 
 # MongoDB setup
-mongo_uri = "mongodb+srv://devxd:f7xEtLeAR0kaTShX@cluster0.cn8sezq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+mongo_uri = "mongodb+srv://successspark09:tushar@filestore12.dnbo7vb.mongodb.net/?retryWrites=true&w=majority&appName=filestore12"
 client = MongoClient(mongo_uri)
 db = client["bot_database"]
 user_collection = db["user_details"]
 
 # Global variables
-owner_id = 1923922961
-auth_users = [1923922961,1188969061]
+owner_id = 6155478725
+auth_users = [6155478725]
 token = ""
 batch_ids = {}
 batch_name_dict = {}
