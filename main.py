@@ -46,9 +46,7 @@ thumb="no"
 
 
 image_urls = [
-    "https://graph.org/file/9dbe3901f43b11e98e6f0.jpg",
-    "https://graph.org/file/c186818a566c501f14abf.jpg",
-    "https://graph.org/file/c5ec0a02be408b354d3fc.jpg",
+    "https://mallucampaign.in/images/img_1720447475.jpg",
 ]
 
 keyboard = InlineKeyboardMarkup(
@@ -56,17 +54,17 @@ keyboard = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(
                 text="👨🏻‍💻 Developer",
-                url="https://t.me/ITS_NOT_ROMEO",
+                url="https://t.me/HKOWNER0",
             ),
             InlineKeyboardButton(
-                text="❣️ GITHUB",
-                url="https://github.com/Devansh20055",
+                text="❣️ KINDNESS",
+                url="https://t.me/love4allxd",
             ),
         ],
         [
             InlineKeyboardButton(
                 text="🪄 Main Channel",
-                url="https://t.me/TEAM_SILENT_KING_OG",
+                url="https://t.me/+gX6tWR1VWvUwOTRl",
             ),
         ],
     ]
@@ -77,7 +75,7 @@ Busy = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(
                 text="👨🏻‍💻 Developer",
-                url="https://t.me/ITS_NOT_ROMEO",
+                url="https://t.me/HKOWNER0",
             ),
         ],
     ]
@@ -584,7 +582,7 @@ async def download_schedule_item(client, message, schedule, batch_name, quals, t
                     try:
                         name1 = topic.replace("\t", "").replace(":", "").replace("/", "").replace("+", "").replace("#", "").replace("|", "").replace("@", "").replace("*", "").replace(".", "").replace("https", "").replace("http", "").strip()
                         topic = f'{name1[:60]}'
-                        prog = await client.send_message(message.chat.id, f"📥 **Downloading **\n\n**➭ File » ** `{name1}`\n**➭ Link »** `{url}`\n✨ **Bot Made by Devansh**\n**━━━━━━━✦✗✦━━━━━━━**")
+                        prog = await client.send_message(message.chat.id, f"📥 **Downloading **\n\n**➭ File » ** `{name1}`\n**➭ Link »** `{url}`\n✨ **Bot Made by HARE KRISHNA**\n**━━━━━━━✦✗✦━━━━━━━**")
                         
                         if "youtube" in url or "embed" in url or "index.m3u8" in url:
                             ytf = f"b[height<={qual}]/bv[height<={qual}]+ba/b/bv+ba"
