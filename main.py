@@ -182,7 +182,7 @@ async def extract_video_id(url, res, token, schedule):
             end_unix = int(datetime.datetime.strptime(end_time, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=datetime.timezone.utc).timestamp())
             
             # Construct the new URL
-            url = f"https://shed-ext12drm.onrender.com?v={url}&quality={res}&start={start_unix}&end={end_unix}&token={token}"
+            url = f"https://drmbatch.onrender.com?v={url}&quality={res}&start={start_unix}&end={end_unix}&token={token}"
             print(f"Constructed URL: {url}")
     
     return url, key, mapped_qual  # Return URL, key, and mapped quality for non-YouTube links
