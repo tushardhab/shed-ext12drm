@@ -1,3 +1,4 @@
+import logger
 import logging
 import subprocess
 import datetime
@@ -33,14 +34,14 @@ async def get_pssh_kid(mpd_url: str, headers: dict = {}, cookies: dict = {}):
                 res = await client.get(mpd_url, headers=headers, cookies=cookies)
                 mpd_res = res.text
         except Exception as e:
-            print("Error fetching MPD:", e)
+            logger.error("Error fetching MPD:", e)
             continue
         try:
             matches = re.finditer("<cenc:pssh>(.*)</cenc:pssh>", mpd_res)
             pssh = next(matches).group(1)
             kid = re.findall(r'default_KID="([\S]+)"', mpd_res)[0].replace("-", "")
         except Exception as e:
-            print("Error extracting PSSH or KID:", e)
+            logger.error("Error extracting PSSH or KID:", e)
             continue
         else:
             break
@@ -76,7 +77,7 @@ class Penpencil:
             ]
         )
         f = base64.b64encode(xor_bytes).decode("utf-8")
-        print(f"Generated OTP Key: {f}")
+        logger.debug(f"Generated OTP Key: {f}")
         return f
 
     def get_key(self, otp: str):
@@ -89,7 +90,7 @@ class Penpencil:
                 for j in range(b)
             ]
         )
-        print(f"Decoded Key: {d}")
+        logger.debug(f"Decoded Key: {d}")
         return d
 
     async def get_keys(self, kid: str):
@@ -105,7 +106,7 @@ class Penpencil:
                     resp = await client.get(otp_url)
                     otp_dict = resp.json()
             except Exception as e:
-                print("Error fetching OTP:", e)
+                logger.error("Error fetching OTP:", e)
                 continue
             try:
                 otp = otp_dict["data"]["otp"]
@@ -113,7 +114,7 @@ class Penpencil:
                 key = self.get_key(otp)
                 keys = f"{kid}:{key}"
             except Exception as e:
-                print("Error extracting key:", e)
+                logger.error("Error extracting key:", e)
                 continue
             else:
                 break
@@ -129,11 +130,11 @@ class Penpencil:
             return mpd_url
         if mpd_url:
             pssh, kid = await get_pssh_kid(mpd_url)
-            print("PSSH:", pssh)
-            print("KID:", kid)
+            logger.info("PSSH:", pssh)
+            logger.info("KID:", kid)
 
             key = await self.get_keys(kid)
-            print("Key:", key)
+            logger.debug("Key:", key)
         return mpd_url, key
 
 async def get_drm_keys(url: str, token: str):
@@ -260,10 +261,10 @@ async def get_drm_keys(url: str, token: str):
 
 async def drm_download_video(url, qual, name, keys):
 
-    print(keys)
+    logger.debug(keys)
     keys = keys.split(":")
     if len(keys) != 2:
-        print("Error: Two keys must be provided separated by a colon.")
+        logger.error("Error: Two keys must be provided separated by a colon.")
         return None
     key1, key2 = keys
 
@@ -310,10 +311,10 @@ async def drm_download_video(url, qual, name, keys):
         
         mkv_file = f"{name}.mkv"
         
-        print(f"Decryption and download to MKV successful with key {keys}.")
+        logger.debug(f"Decryption and download to MKV successful with key {keys}.")
         return mkv_file
     except subprocess.CalledProcessError as e:
-        print(f"Error in download or conversion process: {e}")
+        logger.error(f"Error in download or conversion process: {e}")
         return None
 
 def duration(name):
@@ -344,7 +345,7 @@ async def run(cmd):
 
     stdout, stderr = await proc.communicate()
 
-    print(f'[{cmd!r} exited with {proc.returncode}]')
+    logger.info(f'[{cmd!r} exited with {proc.returncode}]')
     if proc.returncode == 1:
         return False
     if stdout:
@@ -389,7 +390,7 @@ async def download_video(url, name, cmd):
     time.sleep(0.5)
     download_cmd = f'{cmd} -R infinite --fragment-retries 25 --socket-timeout 20 --external-downloader aria2c --downloader-args "aria2c: -x 16 -j 32"'
     global failed_counter
-    print(download_cmd)
+    logger.info(download_cmd)
     logging.info(download_cmd)
     k = subprocess.run(download_cmd, shell=True)
     if "visionias" in cmd and k.returncode != 0 and failed_counter <= 10:
@@ -421,7 +422,7 @@ async def send_vid(bot: Client, m: Message, cc, filename,name, thumb):
     reply = await m.reply_text(f"**⚡️ Starting Uploading ...** - `{name}`")
     try:
         if thumb != "no":
-            print(thumb)
+            logger.info(thumb)
             subprocess.run(['wget', thumb, '-O', 'thumb1.jpg'], check=True)  # Fixing this line
             thumbnail = "thumb1.jpg"
         else:

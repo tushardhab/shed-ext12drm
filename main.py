@@ -1,3 +1,4 @@
+import logger
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery
 import requests
@@ -161,13 +162,13 @@ async def handle_url(url, token, schedule, res):
         if "https://sec1.pw.live/" in url:
             url_id = url.split("/")[-2]
             url = f"https://d1d34p8vz63oiq.cloudfront.net/{url_id}/master.mpd"
-            print(url)
+            logger.info(url)
         else:
             url = url
-        print("mpd check")
-        print(token)
+        logger.info("mpd check")
+        logger.info(token)
         key = await helper.get_drm_keys(url, token)
-        print(key)
+        logger.debug(key)
 
     elif "index.m3u8" in url:
         start_time = schedule.get('startTime')
@@ -180,7 +181,7 @@ async def handle_url(url, token, schedule, res):
             url_id = url.split("/")[-2]
 
             url = f"https://as-multiverse-b0b2769da88f.herokuapp.com/{url_id}/master.m3u8?token={token}"
-            print(f"Constructed URL: {url}")
+            logger.info(f"Constructed URL: {url}")
 
     return url, key, mapped_qual
 
@@ -455,45 +456,45 @@ async def handle_callback_query(client: Client, callback_query: CallbackQuery):
             homework_ids = [hw_id['_id'] for hw_id in schedule.get('homeworkIds', [])]
 
             if not homework_ids:
-                print(f"No homeworkIds found for schedule: {schedule}")
+                logger.info(f"No homeworkIds found for schedule: {schedule}")
                 continue
 
             for homework_id in homework_ids:
                 homework = next((hw for hw in schedule.get('homeworkIds', []) if hw['_id'] == homework_id), None)
                 if not homework:
-                    print(f"No homework found for homeworkId {homework_id} in schedule: {schedule}")
+                    logger.info(f"No homework found for homeworkId {homework_id} in schedule: {schedule}")
                     continue
 
                 attachment_ids = [att['_id'] for att in homework.get('attachmentIds', [])]
                 if not attachment_ids:
-                    print(f"No attachmentIds found for homeworkId {homework_id} in schedule: {schedule}")
+                    logger.info(f"No attachmentIds found for homeworkId {homework_id} in schedule: {schedule}")
                     continue
 
                 for attachment_id in attachment_ids:
                     attachment = next((att for att in homework.get('attachmentIds', []) if att['_id'] == attachment_id), None)
                     if not attachment:
-                        print(f"No attachment found for attachmentId {attachment_id} in homeworkId {homework_id}")
+                        logger.info(f"No attachment found for attachmentId {attachment_id} in homeworkId {homework_id}")
                         continue
 
                     name = attachment.get('name', '')
                     if not name:
-                        print(f"No name found for attachmentId {attachment_id} in homeworkId {homework_id}")
+                        logger.info(f"No name found for attachmentId {attachment_id} in homeworkId {homework_id}")
                         continue
 
                     if "pdf" not in name.lower():
-                        print(f"pdf : {name} ")
+                        logger.info(f"pdf : {name} ")
                         await download_schedule_item(client, callback_query.message, schedule, batch_name, [""], thumb, CR)
                     else:
                         for qual in quals:
-                            print(f"pdf : {name}")
-                            print(f"qual of dpp lec  : {qual}")
+                            logger.info(f"pdf : {name}")
+                            logger.info(f"qual of dpp lec  : {qual}")
                             await download_schedule_item(client, callback_query.message, schedule, batch_name, [qual], thumb, CR)
 
 
         for idx in videos_selected:
             schedule = schedule_data[idx]
             for qual in quals:
-                print(f"qual of lec  : {qual}")
+                logger.info(f"qual of lec  : {qual}")
                 await download_schedule_item(client, callback_query.message, schedule, batch_name, [qual], thumb, CR)
 
         # Reset the selected lists after the download process
@@ -517,7 +518,7 @@ async def handle_callback_query(client: Client, callback_query: CallbackQuery):
             homework_ids = [hw_id['_id'] for hw_id in schedule.get('homeworkIds', [])]
 
             if is_notes and not homework_ids:
-                print(f"pdf VID : {topic}")
+                logger.info(f"pdf VID : {topic}")
                 for qual in quals:
                     await download_schedule_item(client, callback_query.message, schedule, batch_name, [qual], thumb, CR)
 
@@ -525,36 +526,36 @@ async def handle_callback_query(client: Client, callback_query: CallbackQuery):
                 for homework_id in homework_ids:
                     homework = next((hw for hw in schedule.get('homeworkIds', []) if hw['_id'] == homework_id), None)
                     if not homework:
-                        print(f"No homework found for homeworkId {homework_id} in schedule: {schedule}")
+                        logger.info(f"No homework found for homeworkId {homework_id} in schedule: {schedule}")
                         continue
 
                     attachment_ids = [att['_id'] for att in homework.get('attachmentIds', [])]
                     if not attachment_ids:
-                        print(f"No attachmentIds found for homeworkId {homework_id} in schedule: {schedule}")
+                        logger.info(f"No attachmentIds found for homeworkId {homework_id} in schedule: {schedule}")
                         continue
 
                     for attachment_id in attachment_ids:
                         attachment = next((att for att in homework.get('attachmentIds', []) if att['_id'] == attachment_id), None)
                         if not attachment:
-                            print(f"No attachment found for attachmentId {attachment_id} in homeworkId {homework_id}")
+                            logger.info(f"No attachment found for attachmentId {attachment_id} in homeworkId {homework_id}")
                             continue
 
                         name = attachment.get('name', '')
                         if not name:
-                            print(f"No name found for attachmentId {attachment_id} in homeworkId {homework_id}")
+                            logger.info(f"No name found for attachmentId {attachment_id} in homeworkId {homework_id}")
                             continue
 
                         if "pdf" in name.lower():
-                            print(f"pdf : {name} \n schedule : {schedule}")
+                            logger.info(f"pdf : {name} \n schedule : {schedule}")
                             await download_schedule_item(client, callback_query.message, schedule, batch_name, [""], thumb, CR)
                         else:
                             for qual in quals:
-                                print(f"pdf : {name}")
-                                print(f"qual of dpp lec  : {qual} \n schedule : {schedule}")
+                                logger.info(f"pdf : {name}")
+                                logger.info(f"qual of dpp lec  : {qual} \n schedule : {schedule}")
                                 await download_schedule_item(client, callback_query.message, schedule, batch_name, [qual], thumb, CR)
 
             if not is_notes:
-                print(f"vid  not notes : {topic}")
+                logger.info(f"vid  not notes : {topic}")
                 for qual in quals:
                     await download_schedule_item(client, callback_query.message, schedule, batch_name, [qual], thumb, CR)
 
