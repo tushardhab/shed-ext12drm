@@ -571,14 +571,27 @@ async def download_schedule_item(client, message, schedule, batch_name, quals, t
     if 'url' in schedule:
         url = schedule['url']
         for qual in quals:
-            qual = qual.strip() 
-            url, key, mapped_qual = await extract_video_id(url, qual, token, schedule)
+            qual = qual.strip()
+            url, key, mapped_qual = await handle_url(url, token, schedule, qual)
             if url:
                 if ".pdf" not in url and url != '':
                     try:
                         name1 = topic.replace("\t", "").replace(":", "").replace("/", "").replace("+", "").replace("#", "").replace("|", "").replace("@", "").replace("*", "").replace(".", "").replace("https", "").replace("http", "").strip()
                         topic = f'{name1[:60]}'
-                        prog = await client.send_message(message.chat.id, f"📥 **Downloading **\n\n**➭ File » ** `{name1}`\n**➭ Link »** `{url}`\n✨ **Bot Made by HARE KRISHNA**\n**━━━━━━━✦✗✦━━━━━━━**")
+                        prog = await client.send_message(message.chat.id, f"\ud83d\udcc5 **Downloading **\n\n**\u27ad File \xbb ** `{name1}`\n**\u27ad Link \xbb** `{url}`\n\u2728 **Bot Made by HARE KRISHNA**\n**\u254b\u254b\u254b\u254b\u254b\u254b\u254b\u254b\u254b\u254b\u254b\u254b**")
+
+                        if "youtube" in url or "embed" in url or "index.m3u8" in url:
+                            ytf = f"b[height<={qual}]/bv[height<={qual}]+ba/b/bv+ba"
+                            cmd = f'yt-dlp -f "{ytf}" --no-keep-video --remux-video mkv "{url}" -o "{topic}.%(ext)s"'
+                            file = await helper.download_video(url, topic, cmd)
+                        else:
+                            file = await helper.drm_download_video(url,qual, topic, key)
+                        await prog.delete(True)
+                        cc1 = f'**\u27ad Title \xbb {name1}** \n**\u27ad Batch \xbb {batch_name}**\n**\u27ad Subject \xbb {subject} **\n**\u27ad Quality \xbb {qual}**\n\n\u2728 **Downloaded by: @HKOWNER0**\n**\u254b\u254b\u254b\u254b\u254b\u254b\u254b\u254b\u254b\u254b\u254b\u254b**'
+                        video = await helper.send_vid(bot=client, m=message, cc=cc1, filename=file, name=name1,thumb=thumb)
+                        time.sleep(1)
+                    except Exception as e:
+                        await client.send_message(message.chat.id, f"**This #Failed File is not Counted**\n**Name** =>> `{name1}`\n**Link** =>> `{url}`\n **Fail reason \xbb** {e}")
                         
                         if "youtube" in url or "embed" in url or "index.m3u8" in url:
                             ytf = f"b[height<={qual}]/bv[height<={qual}]+ba/b/bv+ba"
