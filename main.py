@@ -144,54 +144,45 @@ async def myplan_command_handler(bot, message):
 
 
 
-async def extract_video_id(url, res, token, schedule):
-    key = None  # Initialize key as None
-    
-    # Quality mapping
+async def handle_url(url, token, schedule, res):
+    key = None
     qual_map = {
         "240": "4",
         "360": "3",
         "480": "2",
         "720": "1"
     }
-    
-    # Get the mapped quality, default to "3" if not found
     mapped_qual = qual_map.get(res, "3")
-    
+
     if "youtube" in url or "embed" in url:
-        return url, key, res  # Return the URL itself, None for key, and original quality for YouTube
-        
-# Assuming url and token are already defined before this
+        return url, key, res
 
-if "master.mpd" in url:
-    if "https://sec1.pw.live/" in url:
-        url_id = url.split("/")[-2]  # Get the second last part of URL
-        url = f"https://d1d34p8vz63oiq.cloudfront.net/{url_id}/master.mpd"
-        print(url)
-    else:
-        url = url  # no change if not matching
-    print("mpd check")
-    print(token)
-    key = await helper.get_drm_keys(url, token)
-    print(key)
+    if "master.mpd" in url:
+        if "https://sec1.pw.live/" in url:
+            url_id = url.split("/")[-2]
+            url = f"https://d1d34p8vz63oiq.cloudfront.net/{url_id}/master.mpd"
+            print(url)
+        else:
+            url = url
+        print("mpd check")
+        print(token)
+        key = await helper.get_drm_keys(url, token)
+        print(key)
 
-elif "index.m3u8" in url:
-    start_time = schedule.get('startTime')
-    end_time = schedule.get('endTime')
+    elif "index.m3u8" in url:
+        start_time = schedule.get('startTime')
+        end_time = schedule.get('endTime')
 
-    if start_time and end_time:
-        # Convert to Unix timestamp (UTC)
-        start_unix = int(datetime.datetime.strptime(start_time, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=datetime.timezone.utc).timestamp())
-        end_unix = int(datetime.datetime.strptime(end_time, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=datetime.timezone.utc).timestamp())
+        if start_time and end_time:
+            start_unix = int(datetime.datetime.strptime(start_time, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=datetime.timezone.utc).timestamp())
+            end_unix = int(datetime.datetime.strptime(end_time, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=datetime.timezone.utc).timestamp())
 
-        # Extract the second last part of URL
-        url_id = url.split("/")[-2]
+            url_id = url.split("/")[-2]
 
-        # Construct the new URL
-        url = f"https://as-multiverse-b0b2769da88f.herokuapp.com/{url_id}/master.m3u8?token={token}"
-        print(f"Constructed URL: {url}")
+            url = f"https://as-multiverse-b0b2769da88f.herokuapp.com/{url_id}/master.m3u8?token={token}"
+            print(f"Constructed URL: {url}")
 
-    return url, key, mapped_qual  # Return URL, key, and mapped quality for non-YouTube links
+    return url, key, mapped_qual
 
 
                     
