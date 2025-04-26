@@ -160,9 +160,7 @@ async def extract_video_id(url, res, token, schedule):
     
     if "youtube" in url or "embed" in url:
         return url, key, res  # Return the URL itself, None for key, and original quality for YouTube
-
-import datetime
-
+        
 # Assuming url and token are already defined before this
 
 if "master.mpd" in url:
