@@ -1,17 +1,17 @@
 import logging
 from logging.handlers import RotatingFileHandler
 
+# Set up basic configuration for logging
 logging.basicConfig(
-    level=logging.ERROR,
-    format=
-    "%(asctime)s - %(levelname)s - %(message)s [%(filename)s:%(lineno)d]",
-    datefmt="%d-%b-%y %H:%M:%S",
-    handlers=[
-        RotatingFileHandler("Assist.txt", maxBytes=50000000, backupCount=10),
-        logging.StreamHandler(),
-    ],
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
 )
-logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
+# Create a logger instance
+logger = logging.getLogger("shed-ext12drm")
+logger.setLevel(logging.INFO)
 
-logging = logging.getLogger()
+# Optional: File handler to save logs to file (with rotation)
+file_handler = RotatingFileHandler("shed-ext12drm.log", maxBytes=5*1024*1024, backupCount=2)
+file_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+logger.addHandler(file_handler)
