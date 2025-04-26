@@ -1,4 +1,4 @@
-import logger
+from logger import logger
 import logging
 import subprocess
 import datetime
