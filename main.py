@@ -170,7 +170,6 @@ if "master.mpd" in url:
         print(url)
     else:
         url = url  # no change if not matching
-
     print("mpd check")
     print(token)
     key = await helper.get_drm_keys(url, token)
